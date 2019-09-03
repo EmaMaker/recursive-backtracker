@@ -15,21 +15,21 @@ public class Cell{
   }
   
   void show(){
-    int i = x*size;
-    int j = y*size;
+    int i = x*(int)sizeW;
+    int j = y*(int)sizeH;
     
     noStroke();
     if(visited) fill(255, 0, 0);
     if(current) fill(0, 0, 255);
-    if(visited||current) rect(i, j, size, size);
+    if(visited||current) rect(i, j, sizeW, sizeH);
     
     stroke(255);
     
     
-    if(walls[0]) line(i, j, i+size, j);
-    if(walls[1]) line(i+size, j, i+size, j+size);
-    if(walls[2]) line(i, j+size, i+size, j + size);
-    if(walls[3]) line(i, j, i, j+size);
+    if(walls[0]) line(i, j, i+sizeW, j);
+    if(walls[1]) line(i+sizeW, j, i+sizeW, j+sizeH);
+    if(walls[2]) line(i, j+sizeH, i+sizeW, j + sizeH);
+    if(walls[3]) line(i, j, i, j+sizeH);
   }
   
   //returning an array of unvisited neighbours, so that they can be easily choosed later on

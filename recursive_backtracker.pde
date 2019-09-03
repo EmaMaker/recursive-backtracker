@@ -1,9 +1,10 @@
 //Algorithm from: https://en.wikipedia.org/wiki/Maze_generation_algorithm
 
 
-int size = 40;
-int W;
-int H;
+int W = 40;
+int H = 40;
+
+float sizeW, sizeH;
 
 Cell[][] cellsGrid;
 ArrayList<Cell> stack = new ArrayList<Cell>();
@@ -12,8 +13,8 @@ Cell currentCell;
 void setup(){
   size(800, 800);
   
-  W = (int)(width/size);
-  H = (int)(height/size);
+  sizeW = width/W;
+  sizeH = height/H;
   
   
   cellsGrid=new Cell[W][H];
