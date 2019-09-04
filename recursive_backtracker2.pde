@@ -1,14 +1,18 @@
 //Algorithm from: https://en.wikipedia.org/wiki/Maze_generation_algorithm
 
 
-int W = 40;
-int H = 40;
+int W = 20;
+int H = 20;
+
+int w = W*2 + 1, h = H*2 + 1;
 
 float sizeW, sizeH;
+float rSizeW, rSizeH;
 
+Cell currentCell;
 Cell[][] cellsGrid;
 ArrayList<Cell> stack = new ArrayList<Cell>();
-Cell currentCell;
+int[][] todraw;
 
 void setup(){
   size(800, 800);
@@ -18,7 +22,17 @@ void setup(){
   
   
   cellsGrid=new Cell[W][H];
+  todraw = new int[w][h];
   
+  rSizeW = width / w;
+  rSizeH = height / h;
+  
+  generate();
+  
+}
+
+
+void generate(){
   
   //init cells
   for(int i = 0; i < W; i++){
@@ -29,16 +43,9 @@ void setup(){
   
   currentCell = cellsGrid[0][0];
   
-}
-
-
-
-
-void draw(){
-  background(0);
   
   //while there are unvisited cells
-  if(!allCellsVisited()){
+  while(!allCellsVisited()){
     //mark current as visisted
     currentCell.visited = true;
     
@@ -85,6 +92,73 @@ void draw(){
       currentCell.current = true;
     }
   }
+}
+
+
+void draw(){
+  
+  //for(int i = 0; i < w; i++){
+  //  for(int j = 0; j < h; j++){
+  //    todraw[i][j] =(int) random(2);     
+  //  }
+  //}
+  
+  //constructs an array so that the walls of the cells are black tiles and the free cells are white tiles
+  
+  for(int i = 0; i < W; i++){
+    for(int j = 0; j < H; j++){
+      int x = 2*i+1;
+      int y = 2*j+1;
+      
+      //current cell
+      todraw[x][y] = 0;
+      
+      //questo fa solo una croce attorno alla cella
+      //up wall
+      
+      if(cellsGrid[i][j].walls[0]) todraw[x][y-1] = 1;
+      else todraw[x][y-1] = 0;
+      //down wall
+      if(cellsGrid[i][j].walls[2]) todraw[x][y+1] = 1;
+      else todraw[x][y+1] = 0;
+      //left wall
+      if(cellsGrid[i][j].walls[3]) todraw[x-1][y] = 1;
+      else  todraw[x-1][y] = 0;
+      //right all
+      if(cellsGrid[i][j].walls[1]) todraw[x+1][y] = 1;
+      else todraw[x+1][y] = 0;
+      
+      //così si fanno pure gli angoli
+      //top-left
+      if(cellsGrid[i][j].walls[0] && cellsGrid[i][j].walls[3])  todraw[x-1][y-1] = 1;
+      //top-right
+      if(cellsGrid[i][j].walls[0] && cellsGrid[i][j].walls[1])  todraw[x+1][y-1] = 1;
+      //bottom-right
+      if(cellsGrid[i][j].walls[2] && cellsGrid[i][j].walls[1])  todraw[x+1][y+1] = 1;
+      //bottom-left
+      if(cellsGrid[i][j].walls[2] && cellsGrid[i][j].walls[3])  todraw[x-1][y+1] = 1;
+      
+      
+    }
+  }
+  
+  
+  for(int i = 0; i < w; i++){
+    for(int j = 0; j < h; j++){
+      fill(255);
+      if(todraw[i][j] == 1) fill(0);
+      noStroke();
+      
+      rect(i*rSizeW, j*rSizeH, rSizeW, rSizeH);
+        
+    }
+  }
+  
+}
+/*
+void draw(){
+  background(0);
+  
   
   for(int i = 0; i < W; i++){
     for(int j = 0; j < H; j++){
@@ -93,7 +167,7 @@ void draw(){
   }
   
   //frameRate(1);
-}
+}*/
 
 boolean allCellsVisited() {
   for(int i = 0; i < W; i++){
@@ -103,30 +177,3 @@ boolean allCellsVisited() {
   }
   return true;
 }
-
-
-
-
-/*void draw(){
-  
-  for(int i = 0; i < w; i++){
-    for(int j = 0; j < h; j++){
-      todraw[i][j] = 0;     
-    }
-  }
-  
-  
-  for(int i = 0; i < w; i++){
-    for(int j = 0; j < h; j++){
-      fill(255);
-      if(todraw[i][j] == 1) fill(0);
-      println(todraw[i][j]);
-      noStroke();
-      
-      rect(i*rSizeW, j*rSizeH, rSizeW, rSizeH);
-        
-    }
-  }
-  
-  noLoop();
-}*/
